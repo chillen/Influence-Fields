@@ -124,17 +124,7 @@ def field_func(key_point, curr_point, a, b):
     r = r/_NORM
     return a * math.exp(-b * r**2)
 
-def load_config():
-    lines = loadStrings("config.txt")
-    if len(lines) < 3:
-        print "Error: Too few lines detected in config.txt"
-        pass
-    global a
-    global b
-    global _NORM
-    a = float(lines[0])
-    b = float(lines[1])
-    _NORM = float(lines[2])
+
 
 def keyPressed():
     if key == BACKSPACE:
