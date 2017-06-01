@@ -1,12 +1,15 @@
 from Field import Field
 from Location import Location 
 import math
+import copy
 
 map_data = []
 map_points = []
+click_points = []
 
 W = 400
 H = 400
+VIEW = ceil(math.sqrt((W**2 + H**2)))
 
 canvas = createImage(W,H,RGB)
 
@@ -15,29 +18,32 @@ SIZE_POINT = 10
 
 def setup():
     size(10,10)
-    this.surface.setSize(W,H)
+    this.surface.setSize(W+VIEW,H)
     setup_canvas()
     setup_data()
     update_fields()
     draw_data()
 
 def draw():
+    background(0)
     image(canvas, 0, 0)
     draw_points()
+    draw_clicks()
+    draw_line()
+    draw_waves()
     
 def setup_canvas():
     canvas.loadPixels()
     canvas.pixels = [color(*COL_BG) for p in canvas.pixels]
     canvas.updatePixels()
 
-# Not accurately drawing
-# TODO: colourize correctly, draw each field properly
 def draw_data():
     for i, c in enumerate(canvas.pixels):
         count = 0.0
         x = i % W
         y = math.floor(float(i) / W)
-        count += map_data[int(x)][int(y)][0]
+        for num in map_data[int(x)][int(y)]:
+            count += num
         _r = red(c)
         _g = green(c)
         _b = blue(c)
@@ -46,12 +52,40 @@ def draw_data():
         canvas.pixels[i] = color(_r,_g,_b)
     canvas.updatePixels()
     
+def draw_grid(inc=10):
+    stroke(100)
+    strokeWeight(1)
+    for i in range(W, W+VIEW, inc):
+        line(i, 0, i, H)
+    for i in range(0, H, inc):
+        line(W, i, W+VIEW, i)
+    
+    
+def draw_waves():
+    # Grid lines
+    draw_grid()
+    
+    
 def draw_points():
     ellipseMode(CENTER)
     noStroke()
     for p in map_points:
         fill(*p.colour)
         ellipse(p.x, p.y, SIZE_POINT, SIZE_POINT)
+        
+def draw_clicks():
+    cross_length = 5
+    for p in click_points:
+        strokeWeight(1)
+        stroke(0)
+        line(p[0]-cross_length, p[1], p[0]+cross_length, p[1])
+        line(p[0], p[1]-cross_length, p[0], p[1]+cross_length)
+
+def draw_line():
+    if len(click_points) == 2:
+        strokeWeight(2)
+        stroke(0)
+        line(click_points[0][0], click_points[0][1], click_points[1][0], click_points[1][1])
         
 # Uses this awesome flatten comprehension: https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
 def flatten(to_flatten):
@@ -82,3 +116,12 @@ def setup_points():
     map_points.append(Location((150,150), (200,200,140)))
     map_points[-1].add_field('water', (20,50,200), 300, 500)
     map_points.append(Location((200,300), (0,200,200)))
+    
+def mouseClicked():
+    if mouseX > W:
+        pass
+    global click_points
+    click_points.append( (mouseX, mouseY) )
+    if len(click_points) > 2:
+        del click_points[0]
+    
