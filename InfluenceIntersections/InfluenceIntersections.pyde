@@ -11,6 +11,7 @@ click_points = []
 W = 400
 H = 400
 VIEW = ceil(math.sqrt((W**2 + H**2)))
+FIELD_MAX = 255
 
 canvas = createImage(W,H,RGB)
 
@@ -54,7 +55,7 @@ def draw_data():
     canvas.updatePixels()
     
 def draw_grid(inc=10):
-    stroke(100)
+    stroke(40)
     strokeWeight(1)
     for i in range(W, W+VIEW, inc):
         line(i, 0, i, H)
@@ -88,9 +89,29 @@ def draw_waves():
     if len(click_points) != 2:
         return
     points = pixels_between(click_points)
-    for p in points:
-        pass
+    strokeWeight(2)
+    stroke(255)
+    if len(points) < 2:
+        return
     
+    for loc in map_points:
+        for field in loc.fields:
+            draw_field_wave(field, points)
+
+def draw_field_wave(field, points):
+    
+    points = [(p[0], field.data[p[0]][p[1]]) for p in points]
+    points = [(p[0] + W, H - (H*p[1]/FIELD_MAX)) for p in points]
+    stroke(*field.colour)
+    strokeWeight(2)
+    noFill()
+    beginShape()
+    curveVertex(*points[0])
+    for p in points:
+        curveVertex(*p)
+    curveVertex(*points[-1])
+    endShape();
+
 def draw_points():
     ellipseMode(CENTER)
     noStroke()

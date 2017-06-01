@@ -7,6 +7,7 @@ class Field():
         self.wide = wide
         self.spread = spread
         self.location = location
+        self.data = None
     
     # 400 is the current normalize. Shush, this is a quick demo
     def _field_at(self, x, y):
@@ -22,4 +23,5 @@ class Field():
         for x in range(W):
             for y in range(H):
                 out[x][y] = self._field_at(x, y)
+        self.data = out
         return out
