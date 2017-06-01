@@ -14,7 +14,7 @@ VIEW = ceil(math.sqrt((W**2 + H**2)))
 
 canvas = createImage(W,H,RGB)
 
-COL_BG = (50,200,100)
+COL_BG = (20,20,20)
 SIZE_POINT = 10
 
 def setup():
@@ -39,18 +39,18 @@ def setup_canvas():
     canvas.updatePixels()
 
 def draw_data():
-    for i, c in enumerate(canvas.pixels):
-        count = 0.0
-        x = i % W
-        y = math.floor(float(i) / W)
-        for num in map_data[int(x)][int(y)]:
-            count += num
-        _r = red(c)
-        _g = green(c)
-        _b = blue(c)
-        _r += count
-        _g -= count
-        canvas.pixels[i] = color(_r,_g,_b)
+    for loc in map_points:
+        for field in loc.fields:
+            for i, c in enumerate(canvas.pixels):
+                x = int(i % W)
+                y = int(math.floor(float(i) / W))
+                _r = red(c)
+                _g = green(c)
+                _b = blue(c)
+                _r += (float(field.colour[0]) / 256) * field.data[x][y]
+                _g += (float(field.colour[1]) / 256) * field.data[x][y]
+                _b += (float(field.colour[2]) / 256) * field.data[x][y]
+                canvas.pixels[i] = color(_r,_g,_b)
     canvas.updatePixels()
     
 def draw_grid(inc=10):
@@ -128,8 +128,8 @@ def draw_clicks():
 
 def draw_line():
     if len(click_points) == 2:
-        strokeWeight(2)
-        stroke(0)
+        strokeWeight(1)
+        stroke(220,200,50)
         line(click_points[0][0], click_points[0][1], click_points[1][0], click_points[1][1])
         
 # Uses this awesome flatten comprehension: https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
@@ -157,20 +157,20 @@ def setup_points():
     global map_points
     map_points = []
     map_points.append(Location((50,50), (20,100,40)))
-    map_points[-1].add_field('war', (20,100,40), 50, 100)
+    map_points[-1].add_field('green', (20,100,40), 50, 400)
     map_points.append(Location((150,150), (200,200,140)))
-    map_points[-1].add_field('water', (20,50,200), 10, 200)
+    map_points[-1].add_field('blue', (20,50,200), 10, 200)
     map_points.append(Location((200,300), (0,200,200)))
     
 def mouseDragged():
     global click_points
     if mouseX > W:
-        pass
+        return
     click_points[1] = (mouseX, mouseY)
     
 def mousePressed():
     if mouseX > W:
-        pass
+        return
     global click_points
     click_points = [ (mouseX, mouseY), (mouseX, mouseY) ]
     
