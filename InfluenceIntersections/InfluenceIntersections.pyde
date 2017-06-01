@@ -24,6 +24,7 @@ def setup():
     setup_data()
     update_fields()
     draw_data()
+    cursor(CROSS)
 
 def draw():
     background(0)
@@ -87,8 +88,9 @@ def draw_waves():
     draw_grid()
     if len(click_points) != 2:
         return
-    points.sort(key=lambda p: p[0])
-    points = pixels_between(click_points)
+    sorted_clicks = copy.copy(click_points)
+    sorted_clicks.sort(key=lambda p: p[0])
+    points = pixels_between(sorted_clicks)
     strokeWeight(2)
     stroke(255)
     if len(points) < 2:
@@ -171,6 +173,13 @@ def mouseDragged():
 def mousePressed():
     if mouseX > W:
         return
-    global click_points
-    click_points = [ (mouseX, mouseY), (mouseX, mouseY) ]
+    if mouseButton == LEFT:
+        global click_points
+        click_points = [ (mouseX, mouseY), (mouseX, mouseY) ]
+    else:
+        x = int(round(mouseX))
+        y = int(round(mouseY))
+        for loc in map_points:
+            for field in loc.fields:
+                print("{:}: {:.2f}".format(field.tag, field.data[x][y]))
     
