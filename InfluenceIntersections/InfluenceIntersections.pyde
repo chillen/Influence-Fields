@@ -87,6 +87,7 @@ def draw_waves():
     draw_grid()
     if len(click_points) != 2:
         return
+    points.sort(key=lambda p: p[0])
     points = pixels_between(click_points)
     strokeWeight(2)
     stroke(255)
