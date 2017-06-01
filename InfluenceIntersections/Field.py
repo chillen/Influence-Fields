@@ -1,4 +1,5 @@
 import math
+import Tools
 
 class Field():
     def __init__(self, tag, colour, wide, spread, location):
@@ -22,6 +23,6 @@ class Field():
         out = [ [ 0 for _ in range(H) ] for _ in range(W) ]
         for x in range(W):
             for y in range(H):
-                out[x][y] = self._field_at(x, y)
+                out[x][y] = min(self._field_at(x, y), Tools.FIELD_MAX)
         self.data = out
         return out

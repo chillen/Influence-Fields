@@ -2,16 +2,15 @@ from Field import Field
 from Location import Location 
 import math
 import copy
-from sets import Set
+import Tools
 
 map_data = []
 map_points = []
 click_points = []
 
-W = 400
-H = 400
+W = 600
+H = 500
 VIEW = ceil(math.sqrt((W**2 + H**2)))
-FIELD_MAX = 255
 
 canvas = createImage(W,H,RGB)
 
@@ -101,7 +100,7 @@ def draw_waves():
 def draw_field_wave(field, points):
     
     points = [(p[0], field.data[p[0]][p[1]]) for p in points]
-    points = [(p[0] + W, H - (H*p[1]/FIELD_MAX)) for p in points]
+    points = [(p[0] + W, H - (H*p[1]/(Tools.FIELD_MAX+13))) for p in points]
     stroke(*field.colour)
     strokeWeight(2)
     noFill()
@@ -158,16 +157,20 @@ def setup_points():
     global map_points
     map_points = []
     map_points.append(Location((50,50), (20,100,40)))
-    map_points[-1].add_field('war', (20,100,40), 300, 500)
+    map_points[-1].add_field('war', (20,100,40), 50, 100)
     map_points.append(Location((150,150), (200,200,140)))
-    map_points[-1].add_field('water', (20,50,200), 300, 500)
+    map_points[-1].add_field('water', (20,50,200), 10, 200)
     map_points.append(Location((200,300), (0,200,200)))
     
-def mouseClicked():
+def mouseDragged():
+    global click_points
+    if mouseX > W:
+        pass
+    click_points[1] = (mouseX, mouseY)
+    
+def mousePressed():
     if mouseX > W:
         pass
     global click_points
-    click_points.append( (mouseX, mouseY) )
-    if len(click_points) > 2:
-        del click_points[0]
+    click_points = [ (mouseX, mouseY), (mouseX, mouseY) ]
     
