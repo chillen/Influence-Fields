@@ -60,10 +60,19 @@ def draw_grid(inc=10):
     for i in range(0, H, inc):
         line(W, i, W+VIEW, i)
     
-    
+# The best we can do is a linear interpolation
 def draw_waves():
+    def round_point(p):
+        return 
     # Grid lines
     draw_grid()
+    if len(click_points) < 2:
+        pass
+    x1 = click_points[0][0]
+    x2 = click_points[1][0]
+    y1 = click_points[0][1]
+    y2 = click_points[1][1]
+    dist = math.hypot(x2-x1, y2-y1)
     
     
 def draw_points():
