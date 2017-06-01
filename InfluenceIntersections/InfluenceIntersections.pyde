@@ -98,8 +98,7 @@ def draw_waves():
             draw_field_wave(field, points)
 
 def draw_field_wave(field, points):
-    
-    points = [(p[0], field.data[p[0]][p[1]]) for p in points]
+    points = [(i, field.data[p[0]][p[1]]) for i,p in enumerate(points)]
     points = [(p[0] + W, H - (H*p[1]/(Tools.FIELD_MAX+13))) for p in points]
     stroke(*field.colour)
     strokeWeight(2)
