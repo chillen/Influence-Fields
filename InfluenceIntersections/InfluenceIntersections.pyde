@@ -2,6 +2,7 @@ from Field import Field
 from Location import Location 
 import math
 import copy
+from sets import Set
 
 map_data = []
 map_points = []
@@ -60,20 +61,35 @@ def draw_grid(inc=10):
     for i in range(0, H, inc):
         line(W, i, W+VIEW, i)
     
-# The best we can do is a linear interpolation
-def draw_waves():
+# Based on RedBlob linear interpolation
+def pixels_between(points):
     def round_point(p):
-        return 
+        return (int(round(p[0])), int(round(p[1])))
+    def diag_dist(points):
+        dx = points[0][0] - points[1][0]
+        dy = points[1][0] - points[0][1]
+        return max(abs(dx), abs(dy))
+    def lerp(s, e, t):
+        return s + t * (e-s)
+    def lerp_points(points, t):
+        return ( lerp(points[0][0], points[1][0], t), lerp(points[0][1], points[1][1], t) )
+    on_line = []
+    N = diag_dist(points)
+    if N == 0:
+        return
+    for i in range(N):
+        t = float(i)/N
+        on_line.append(round_point(lerp_points(points, t)))
+    return on_line
+
+def draw_waves():
     # Grid lines
     draw_grid()
-    if len(click_points) < 2:
+    if len(click_points) != 2:
+        return
+    points = pixels_between(click_points)
+    for p in points:
         pass
-    x1 = click_points[0][0]
-    x2 = click_points[1][0]
-    y1 = click_points[0][1]
-    y2 = click_points[1][1]
-    dist = math.hypot(x2-x1, y2-y1)
-    
     
 def draw_points():
     ellipseMode(CENTER)
