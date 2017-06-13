@@ -12,8 +12,8 @@ class Location():
         self.fields = []
         self.colour = colour
         
-    def add_field(self, name, colour, wide, spread):
-        self.fields.append(Field(name, colour, wide, spread, self.location))
+    def add_field(self, name, colour, wide, spread, interference=[]):
+        self.fields.append(Field(name, colour, wide, spread, self.location, interference))
         
     def num_fields(self):
         return len(self.fields)

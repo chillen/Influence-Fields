@@ -159,9 +159,10 @@ def setup_points():
     global map_points
     map_points = []
     map_points.append(Location((50,50), (20,100,40)))
+    i = [(50,400)]
     map_points[-1].add_field('green', (20,100,40), 50, 400)
     map_points.append(Location((150,150), (200,200,140)))
-    map_points[-1].add_field('blue', (20,50,200), 10, 200)
+    map_points[-1].add_field('blue', (20,50,200), 10, 200, i)
     map_points.append(Location((200,300), (0,200,200)))
     
 def mouseDragged():
