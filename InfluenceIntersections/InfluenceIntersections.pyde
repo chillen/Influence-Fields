@@ -49,13 +49,15 @@ def draw_data():
             for i, c in enumerate(canvas.pixels):
                 x = int(i % W)
                 y = int(math.floor(float(i) / W))
-                _r = red(c)
-                _g = green(c)
-                _b = blue(c)
-                _r += (float(field.colour[0]) / 256) * field.data[x][y]
-                _g += (float(field.colour[1]) / 256) * field.data[x][y]
-                _b += (float(field.colour[2]) / 256) * field.data[x][y]
-                canvas.pixels[i] = color(_r,_g,_b)
+                if field.location[0] - field.radius < x < field.location[0] + field.radius:
+                    if field.location[1] - field.radius < y < field.location[1] + field.radius:
+                        _r = red(c)
+                        _g = green(c)
+                        _b = blue(c)
+                        _r += (float(field.colour[0]) / 256) * field.data[x][y]
+                        _g += (float(field.colour[1]) / 256) * field.data[x][y]
+                        _b += (float(field.colour[2]) / 256) * field.data[x][y]
+                        canvas.pixels[i] = color(_r,_g,_b)
     canvas.updatePixels()
     
 def draw_grid(inc=10):

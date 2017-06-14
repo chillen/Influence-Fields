@@ -26,8 +26,8 @@ class Field():
     # Takes in max height and max width
     def emit(self, H, W):
         out = [ [ 0 for _ in range(H) ] for _ in range(W) ]
-        for x in range(self.x-self.radius, self.x+self.radius):
-            for y in range(self.y-self.radius, self.y+self.radius):
+        for x in range(self.location[0]-self.radius, self.location[0]+self.radius):
+            for y in range(self.location[1]-self.radius, self.location[1]+self.radius):
                 out[x][y] = min(self._field_at(x, y), Tools.FIELD_MAX)
         self.data = out
         return out
