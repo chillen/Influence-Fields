@@ -1,4 +1,4 @@
-FIELD_MAX = 256
+FIELD_MAX = 255
 
 def load_data():
     pass

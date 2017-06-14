@@ -2,22 +2,22 @@ import math
 import Tools
 
 class Field():
-    def __init__(self, tag, colour, wide, spread, location, interference=[]):
+    def __init__(self, tag, colour, radius, peak, location, interference=[]):
         self.tag = tag
         self.colour = colour
-        self.wide = wide
-        self.spread = spread
+        self.radius = radius
+        self.peak = peak
         self.location = location
         self.interference = interference
         self.data = None
     
-    # 400 is the current normalize. Shush, this is a quick demo
     def _field_at(self, x, y):
-        r = math.hypot(self.location[0] - x, self.location[1] - y)
-        r = r/400
-        f = self.spread * math.exp(-self.wide * r**2)
+        r = (self.location[0] - x)**2 + (self.location[1] - y)**2
+        stdev = (self.radius / 4.761)**2
+        f = self.peak * math.exp(-stdev**(-1) * r)
         for i in self.interference:
-            f -= i[1] * math.exp(-i[0] * r**2)
+            stdev = (i[0]/4.761)**2
+            f -= i[1] * math.exp(-stdev * r)
             
         return f
     

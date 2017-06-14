@@ -4,6 +4,10 @@ import math
 import copy
 import Tools
 
+# The max radius of a field is a power series about the stddev
+# Given the stddev, b, the max radius (where the field is >= 1) 
+# is equal to f(4.761 * sqrt(b))
+
 map_data = []
 map_points = []
 click_points = []
@@ -158,12 +162,9 @@ def setup_data():
 def setup_points():
     global map_points
     map_points = []
-    map_points.append(Location((50,50), (20,100,40)))
-    i = [(50,400)]
-    map_points[-1].add_field('green', (20,100,40), 50, 400)
-    map_points.append(Location((150,150), (200,200,140)))
-    map_points[-1].add_field('blue', (20,50,200), 10, 200, i)
-    map_points.append(Location((200,300), (0,200,200)))
+    i = []
+    map_points.append(Location((W/2, H/2), (20,100,40)))
+    map_points[-1].add_field('green', (20,100,40), 100, Tools.FIELD_MAX, i)
     
 def mouseDragged():
     global click_points
